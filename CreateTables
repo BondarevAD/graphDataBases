@@ -2,7 +2,7 @@ CREATE TABLE Classmates (
     id INT PRIMARY KEY,
     name VARCHAR(50),
     age INT
-);
+) AS NODE;
 
 CREATE TABLE Coursemates (
     id INT PRIMARY KEY,
