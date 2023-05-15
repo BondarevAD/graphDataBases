@@ -1,3 +1,16 @@
+DROP TABLE Be_Friends
+DROP TABLE Living
+DROP TABLE Writes_off_homework
+DROP TABLE Reccomend_movie
+DROP TABLE Recommend_book
+
+DROP TABLE Books
+DROP TABLE Cities
+DROP TABLE Classmates
+DROP TABLE Coursemates
+DROP TABLE Disciplines
+DROP TABLE Movies
+
 CREATE TABLE Classmates (
     id INT PRIMARY KEY,
     name VARCHAR(50),
@@ -34,47 +47,13 @@ CREATE TABLE Cities (
     country VARCHAR(50)
 )AS NODE;
 
---таблицы ребра
 
-CREATE TABLE Be_Friends
- (
-    id_classmate INT,
-    id_coursemate INT,
-    FOREIGN KEY (id_classmate) REFERENCES Classmates(id),
-    FOREIGN KEY (id_coursemate) REFERENCES Coursemates(id)
-)AS EDGE;
+CREATE TABLE Be_Friends AS EDGE;
+CREATE TABLE Livivng AS EDGE;
+CREATE TABLE Writes_off_homework AS EDGE;
+CREATE TABLE Reccomend_movie AS EDGE;
+CREATE TABLE Recommend_book AS EDGE;
 
-CREATE TABLE Living (
-    id_student INT,
-    id_city INT,
-    FOREIGN KEY (id_student) REFERENCES Coursemates(id),
-    FOREIGN KEY (id_city) REFERENCES Cities(id)
-)AS EDGE;
-
-CREATE TABLE Writes_off_homework (
-    id_student INT,
-    id_displine INT,
-    FOREIGN KEY (id_student) REFERENCES Coursemates(id),
-    FOREIGN KEY (id_displine) REFERENCES Disciplines(id)
-)AS EDGE;
-
-CREATE TABLE Recommend_book (
-    id_student INT,
-    id_book INT,
-    FOREIGN KEY (id_student) REFERENCES Classmates(id),
-    FOREIGN KEY (id_book) REFERENCES Books(id)
-)AS EDGE;
-
-CREATE TABLE Reccomend_movie (
-    id_student INT,
-    id_movie INT,
-    FOREIGN KEY (id_student) REFERENCES Classmates(id),
-    FOREIGN KEY (id_movie) REFERENCES Movies(id)
-)AS EDGE;
-
---заполнение таблиц узлов
-
--- Заполнение таблицы "Одноклассники"
 INSERT INTO Classmates (id, name, age) VALUES
 (1, 'Иван', 20),
 (2, 'Алексей', 19),
@@ -135,7 +114,7 @@ INSERT INTO Movies (id, title, director) VALUES
 (5, 'Бойцовский клуб', 'Дэвид Финчер'),
 (6, 'Заводной апельсин', 'Стэнли Кубрик'),
 (7, 'Храброе сердце', 'Мел Гибсон'),
-(8, 'Звездные войны: Эпизод V - Империя наносит ответный удар', 'Ирвин Кершнер'),
+(8, 'Звездные войны: Эпизод V', 'Ирвин Кершнер'),
 (9, 'Игры разума', 'Рон Ховард'),
 (10, 'Титаник', 'Джеймс Кэмерон');
 
@@ -151,6 +130,30 @@ INSERT INTO Cities (id, name, country) VALUES
 (8, 'Сидней', 'Австралия'),
 (9, 'Каир', 'Египет'),
 (10, 'Сан-Франциско', 'США');
+
+INSERT INTO Be_Friends ($from_id, $to_id)
+VALUES ((SELECT $node_id FROM Classmates WHERE id = 1),
+ (SELECT $node_id FROM Coursemates WHERE id = 2)),
+ ((SELECT $node_id FROM Classmates WHERE id = 1),
+ (SELECT $node_id FROM Coursemates WHERE id = 5)),
+ ((SELECT $node_id FROM Classmates WHERE id = 2),
+ (SELECT $node_id FROM Coursemates WHERE id = 3)),
+ ((SELECT $node_id FROM Classmates WHERE id = 3),
+ (SELECT $node_id FROM Coursemates WHERE id = 1)),
+ ((SELECT $node_id FROM Classmates WHERE id = 3),
+ (SELECT $node_id FROM Coursemates WHERE id = 6)),
+ ((SELECT $node_id FROM Classmates WHERE id = 4),
+ (SELECT $node_id FROM Coursemates WHERE id = 2)),
+ ((SELECT $node_id FROM Classmates WHERE id = 5),
+ (SELECT $node_id FROM Coursemates WHERE id = 4)),
+ ((SELECT $node_id FROM Classmates WHERE id = 6),
+ (SELECT $node_id FROM Coursemates WHERE id = 7)),
+ ((SELECT $node_id FROM Classmates WHERE id = 6),
+ (SELECT $node_id FROM Coursemates WHERE id = 8)),
+ ((SELECT $node_id FROM Classmates WHERE id = 8),
+ (SELECT $node_id FROM Coursemates WHERE id = 3));
+
+ SELECT * FROM Be_Friends
 
 
 
